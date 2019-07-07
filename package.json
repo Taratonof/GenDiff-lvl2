@@ -1,0 +1,42 @@
+{
+  "name": "gendiff",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "babel-node": "babel-node",
+    "prepublishOnly": "npm run build",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taratonof/frontend-project-lvl2.git"
+  },
+  "author": "Artur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Taratonof/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/Taratonof/frontend-project-lvl2#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.0"
+  },
+  "dependencies": {
+    "brackets-eslint": "^3.2.0",
+    "commander": "^2.20.0"
+  }
+}
