@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import commander from 'commander';
-import has from 'lodash/has';
 import path from 'path';
 import fs from 'fs';
+import yaml from 'js-yaml';
 import { version } from '../../package.json';
+import parsers from '../parsers';
+import buildObject from '../functions/buildObject';
 
 const program = commander;
 
@@ -23,34 +25,10 @@ if (program.format) console.log('%s', [program.format]);
 function gendiff(first, second) {
   const beforePath = path.isAbsolute(first) ? first : path.resolve(process.cwd(), first);
   const afterPath = path.isAbsolute(second) ? second : path.resolve(process.cwd(), second);
-  const beforeFile = fs.readFileSync(beforePath, 'utf-8');
-  const afterFile = fs.readFileSync(afterPath, 'utf-8');
-  const before = JSON.parse(beforeFile);
-  const after = JSON.parse(afterFile);
+  const before = buildObject(beforePath);
+  const after = buildObject(afterPath);
 
-  const preResult = Object.keys(before).reduce((acc, key) => {
-    if (has(after, key)) {
-      if (before[key] === after[key]) {
-        acc += `    ${key} = ${before[key]}\n`;
-        return acc;
-      }
-      acc += `  - ${key} = ${before[key]}\n` + `  + ${key} = ${after[key]}\n`;
-      return acc;
-    }
-    acc += `  - ${key} = ${before[key]}\n`;
-    return acc;
-  }, '');
-  const result = Object.keys(after).reduce((acc, key) => {
-    if (!has(before, key)) {
-      acc += `  + ${key} = ${after[key]}\n`;
-    }
-    return acc;
-  }, preResult);
-
-  const finalresult = `{\n${result}}`;
-
-  console.log(finalresult);
-  return finalresult;
+  return parsers(before, after);
 }
 
 export default gendiff;
