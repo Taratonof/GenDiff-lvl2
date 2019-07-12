@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
+import ini from 'ini'
 
 function buildObject(fullPath) {
   const str = fs.readFileSync(fullPath, 'utf-8');
@@ -10,6 +11,9 @@ function buildObject(fullPath) {
   }
   if (path.extname(fullPath) === '.yml') {
     object = yaml.safeLoad(str);
+  }
+  if (path.extname(fullPath) === '.ini') {
+    object = ini.decode(str);
   }
   return object;
 }
