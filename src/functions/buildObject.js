@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
-import ini from 'ini'
+import ini from 'ini';
 
 function buildObject(fullPath) {
   const str = fs.readFileSync(fullPath, 'utf-8');

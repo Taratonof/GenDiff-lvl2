@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import commander from 'commander';
 import path from 'path';
-import fs from 'fs';
-import yaml from 'js-yaml';
 import { version } from '../../package.json';
 import parsers from '../parsers';
 import buildObject from '../functions/buildObject';
@@ -27,7 +25,7 @@ function gendiff(first, second) {
   const afterPath = path.isAbsolute(second) ? second : path.resolve(process.cwd(), second);
   const before = buildObject(beforePath);
   const after = buildObject(afterPath);
-
+  console.log(parsers(before, after));
   return parsers(before, after);
 }
 
