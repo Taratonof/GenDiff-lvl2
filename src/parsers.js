@@ -1,9 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash';
-
-function tabs(num) {
-  return ' '.repeat(num * 2);
-}
+import getTreeFormat from './formatters/getTreeFormat';
+import getPlainFormat from './formatters/getPlainFormat';
 
 function difference(before, after) {
   const preResult = Object.keys(before).reduce((acc, key) => {
@@ -54,36 +52,12 @@ function difference(before, after) {
   return result;
 }
 
-function parseString(tree) {
-  const parse = (elements, level) => {
-    const result = elements.reduce((acc, elem) => {
-      let prefix;
-      if (elem.type === 'deleted') {
-        prefix = '-';
-      }
-      if (elem.type === 'add') {
-        prefix = '+';
-      }
-      if (elem.type === 'unchanged') {
-        prefix = ' ';
-      }
-      if (elem.children.length > 0) {
-        return `${acc}${tabs(level)}${prefix} ${elem.name}: {\n${parse(elem.children, level + 2)}${tabs(level)}  }\n`;
-      }
-      if (typeof elem.value !== 'string' && typeof elem.value !== 'number' && !(elem.value instanceof Array) && typeof elem.value !== 'boolean' && elem.value instanceof Object) {
-        return `${acc}${tabs(level)}${prefix} ${elem.name}: {\n${Object.keys(elem.value).map(key => `${tabs(level + 2)}  ${key}: ${elem.value[key]}`).join('\n')}\n${tabs(level)}  }\n`;
-      }
-      return `${acc}${tabs(level)}${prefix} ${elem.name}: ${elem.value}\n`;
-    }, '');
-    return result;
-  };
-  return `{\n${parse(tree, 1)}}`;
-}
-
-
-function generationStringData(before, after) {
+function generationStringData(before, after, format) {
   const difTree = difference(before, after);
-  return parseString(difTree);
+  if (format === 'plain') {
+    return getPlainFormat(difTree);
+  }
+  return getTreeFormat(difTree);
 }
 
 export default generationStringData;
