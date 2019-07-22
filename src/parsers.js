@@ -2,6 +2,7 @@
 import _ from 'lodash';
 import getTreeFormat from './formatters/getTreeFormat';
 import getPlainFormat from './formatters/getPlainFormat';
+import getJsonFormat from './formatters/getJsonFormat';
 
 function difference(before, after) {
   const preResult = Object.keys(before).reduce((acc, key) => {
@@ -54,6 +55,9 @@ function difference(before, after) {
 
 function generationStringData(before, after, format) {
   const difTree = difference(before, after);
+  if (format === 'json') {
+    return getJsonFormat(difTree);
+  }
   if (format === 'plain') {
     return getPlainFormat(difTree);
   }
