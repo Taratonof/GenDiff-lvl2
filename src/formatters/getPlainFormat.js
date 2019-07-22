@@ -24,7 +24,7 @@ function getPlainFormat(tree) {
       if (typeof elem.value === 'string') {
         value = `'${elem.value}'`;
       } else if (typeof elem.value === 'number' || typeof elem.value === 'boolean') {
-        value = elem[value];
+        ({ value } = elem);
       } else {
         value = '[complex value]';
       }
