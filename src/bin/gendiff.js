@@ -19,7 +19,7 @@ const program = commander;
 program
   .version(version)
   .arguments('<firstConfig> <secondConfig>')
-  .option('-f, --format [type]', 'Output format')
+  .option('-f, --format [type]', 'Output format: "plain" and "json"')
   .action((firstConfig, secondConfig, cmd) => {
     gendiff(firstConfig, secondConfig, cmd.format);
   })
