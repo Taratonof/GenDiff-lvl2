@@ -1,3 +1,3 @@
-import genDiff from './bin/gendiff';
+import runGennDiff from './runGennDiff';
 
-export default genDiff;
+export default runGennDiff;

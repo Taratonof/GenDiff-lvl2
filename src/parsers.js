@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash';
 import getTreeFormat from './formatters/getTreeFormat';
 import getPlainFormat from './formatters/getPlainFormat';
