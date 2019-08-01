@@ -1,59 +1,39 @@
 import path from 'path';
 import fs from 'fs';
-import runGennDiff from '../src/runGennDiff';
+import runGenDiff from '../src/formatters';
 
-test('test of "runGennDiff" function with JSON format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'before.json');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'after.json');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerSet.txt'), 'utf-8');
+const runTest = (beforeFileName, afterFileName, resultFileName, format = 'tree') => {
+  const firstFailPath = path.join(__dirname, '__fixtures__', beforeFileName);
+  const secondFailPath = path.join(__dirname, '__fixtures__', afterFileName);
+  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', resultFileName), 'utf-8');
 
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+  expect(runGenDiff(firstFailPath, secondFailPath, format)).toBe(result);
+};
+
+test('test of "runGenDiff" function with JSON format', () => {
+  runTest('before.json', 'after.json', 'resultSet.txt');
 });
 
-test('test of "runGennDiff" function with YAML format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'before.yml');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'after.yml');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerSet.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+test('test of "runGenDiff" function with YAML format', () => {
+  runTest('before.yml', 'after.yml', 'resultSet.txt');
 });
 
-test('test of "runGennDiff" function with INI format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'before.ini');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'after.ini');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerSet.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+test('test of "runGenDiff" function with INI format', () => {
+  runTest('before.ini', 'after.ini', 'resultSet.txt');
 });
 
-test('test of "runGennDiff" function with the tree JSON format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'beforeTree.json');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'afterTree.json');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerTree.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+test('test of "runGenDiff" function with the tree JSON format', () => {
+  runTest('beforeTree.json', 'afterTree.json', 'resultTree.txt');
 });
 
-test('test of "runGennDiff" function with the tree YAML format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'beforeTree.yml');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'afterTree.yml');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerTree.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+test('test of "runGenDiff" function with the tree YAML format', () => {
+  runTest('beforeTree.yml', 'afterTree.yml', 'resultTree.txt');
 });
 
-test('test of "runGennDiff" function with the tree INI format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'beforeTree.ini');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'afterTree.ini');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerTree.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath)).toBe(result);
+test('test of "runGenDiff" function with the tree INI format', () => {
+  runTest('beforeTree.ini', 'afterTree.ini', 'resultTree.txt');
 });
 
-test('test of "runGennDiff" function with the plain JSON format', () => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', 'beforeTree.json');
-  const secondFailPath = path.join(__dirname, '__fixtures__', 'afterTree.json');
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', 'answerPlainFormat.txt'), 'utf-8');
-
-  expect(runGennDiff(firstFailPath, secondFailPath, 'plain')).toBe(result);
+test('test of "runGenDiff" function with the plain JSON format', () => {
+  runTest('beforeTree.json', 'afterTree.json', 'resultPlainFormat.txt', 'plain');
 });

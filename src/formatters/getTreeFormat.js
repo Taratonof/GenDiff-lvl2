@@ -6,6 +6,13 @@ function parseString(tree) {
   const parse = (elements, level) => {
     const result = elements.reduce((acc, elem) => {
       let prefix;
+      if (elem.type === 'changed') {
+        if (typeof elem.oldValue !== 'string' && typeof elem.oldValue !== 'number' && !(elem.oldValue instanceof Array) && typeof elem.oldValue !== 'boolean' && elem.oldValue instanceof Object) {
+          prefix = `- ${elem.name}: {\n${Object.keys(elem.oldValue).map(key => `${tabs(level + 2)}  ${key}: ${elem.oldValue[key]}`).join('\n')}\n${tabs(level)}  }\n${tabs(level)}+`;
+        } else {
+          prefix = `- ${elem.name}: ${elem.oldValue}\n${tabs(level)}+`;
+        }
+      }
       if (elem.type === 'deleted') {
         prefix = '-';
       }

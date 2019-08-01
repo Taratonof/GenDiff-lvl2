@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import commander from 'commander';
-import runGennDiff from '../runGennDiff';
+import runGennDiff from '../formatters';
 import { version } from '../../package.json';
 
 const program = commander;
