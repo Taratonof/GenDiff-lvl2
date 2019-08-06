@@ -13,14 +13,14 @@ const getPlainFormat = (tree) => {
       if (elem.type === 'deleted') {
         return `${acc}Property '${accPath + elem.name}' was removed\n`;
       }
-      if (elem.type === 'add') {
+      if (elem.type === 'added') {
         return `${acc}Property '${accPath + elem.name}' was added with value: ${value}\n`;
       }
-      if (elem.type === 'changed') {
+      if (elem.type === 'modified') {
         const beforeValue = typeof elem.oldValue === 'string' ? `'${elem.oldValue}'` : elem.oldValue;
         return `${acc}Property '${accPath + elem.name}' was updated. From ${beforeValue} to ${value}\n`;
       }
-      if (elem.type === 'unchanged' && elem.children.length > 0) {
+      if (elem.type === 'unmodified' && elem.children.length > 0) {
         const path = `${accPath}${elem.name}.`;
         return `${acc}${parse(elem.children, path)}`;
       }

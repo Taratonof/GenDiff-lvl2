@@ -1,39 +1,15 @@
 import path from 'path';
 import fs from 'fs';
-import runGenDiff from '../src/formatters';
+import runGenDiff from '../src';
 
-const runTest = (beforeFileName, afterFileName, resultFileName, format = 'tree') => {
-  const firstFailPath = path.join(__dirname, '__fixtures__', beforeFileName);
-  const secondFailPath = path.join(__dirname, '__fixtures__', afterFileName);
-  const result = fs.readFileSync(path.join(__dirname, '__fixtures__', resultFileName), 'utf-8');
-
-  expect(runGenDiff(firstFailPath, secondFailPath, format)).toBe(result);
-};
-
-test('test of "runGenDiff" function with JSON format', () => {
-  runTest('before.json', 'after.json', 'resultSet.txt');
-});
-
-test('test of "runGenDiff" function with YAML format', () => {
-  runTest('before.yml', 'after.yml', 'resultSet.txt');
-});
-
-test('test of "runGenDiff" function with INI format', () => {
-  runTest('before.ini', 'after.ini', 'resultSet.txt');
-});
-
-test('test of "runGenDiff" function with the tree JSON format', () => {
-  runTest('beforeTree.json', 'afterTree.json', 'resultTree.txt');
-});
-
-test('test of "runGenDiff" function with the tree YAML format', () => {
-  runTest('beforeTree.yml', 'afterTree.yml', 'resultTree.txt');
-});
-
-test('test of "runGenDiff" function with the tree INI format', () => {
-  runTest('beforeTree.ini', 'afterTree.ini', 'resultTree.txt');
-});
-
-test('test of "runGenDiff" function with the plain JSON format', () => {
-  runTest('beforeTree.json', 'afterTree.json', 'resultPlainFormat.txt', 'plain');
-});
+test.each([['before.json', 'after.json', 'tree', 'resultSet.txt'], ['before.yml', 'after.yml', 'tree', 'resultSet.txt'], ['before.ini', 'after.ini', 'tree', 'resultSet.txt'],
+  ['beforeTree.yml', 'afterTree.yml', 'tree', 'resultTree.txt'], ['beforeTree.ini', 'afterTree.ini', 'tree', 'resultTree.txt'],
+  ['beforeTree.json', 'afterTree.json', 'plain', 'resultPlainFormat.txt']])(
+  'test of "runGenDiff" function with files "%s" and "%s" and output in "%s" format',
+  (beforeFileName, afterFileName, format, resultFileName) => {
+    const firstFilePath = path.join(__dirname, '__fixtures__', beforeFileName);
+    const secondFilePath = path.join(__dirname, '__fixtures__', afterFileName);
+    const result = fs.readFileSync(path.join(__dirname, '__fixtures__', resultFileName), 'utf-8');
+    expect(runGenDiff(firstFilePath, secondFilePath, format)).toBe(result);
+  },
+);
