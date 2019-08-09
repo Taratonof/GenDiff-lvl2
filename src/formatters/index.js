@@ -2,13 +2,13 @@
 import getTreeFormat from './treeFormatter';
 import getPlainFormat from './plainFormatter';
 import getJsonFormat from './jsonFormatter';
-import getTreeDifference from '../parsers';
+import getTreeDifference from '../ast';
 
 const generationStringData = (before, after, format) => {
   const mapping = {
-    json: tree => getJsonFormat(tree),
-    plain: tree => getPlainFormat(tree),
-    tree: tree => getTreeFormat(tree),
+    json: getJsonFormat,
+    plain: getPlainFormat,
+    tree: getTreeFormat,
   };
   const difTree = getTreeDifference(before, after);
 

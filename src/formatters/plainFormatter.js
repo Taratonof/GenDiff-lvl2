@@ -1,30 +1,32 @@
 const getPlainFormat = (tree) => {
   const parse = (elements, accPath) => {
     const result = elements.reduce((acc, elem) => {
-      let value;
-      if (typeof elem.value === 'string') {
-        value = `'${elem.value}'`;
-      } else if (typeof elem.value === 'number' || typeof elem.value === 'boolean') {
-        ({ value } = elem);
-      } else {
-        value = '[complex value]';
-      }
+      const getValue = () => {
+        if (typeof elem.value === 'string') {
+          return `'${elem.value}'`;
+        }
+        if (typeof elem.value === 'number' || typeof elem.value === 'boolean') {
+          return elem.value;
+        }
+        return '[complex value]';
+      };
 
-      if (elem.type === 'deleted') {
-        return `${acc}Property '${accPath + elem.name}' was removed\n`;
+      switch (elem.type) {
+        case 'deleted':
+          return `${acc}Property '${accPath + elem.name}' was removed\n`;
+        case 'added':
+          return `${acc}Property '${accPath + elem.name}' was added with value: ${getValue()}\n`;
+        case 'modified': {
+          const beforeValue = typeof elem.oldValue === 'string' ? `'${elem.oldValue}'` : elem.oldValue;
+          return `${acc}Property '${accPath + elem.name}' was updated. From ${beforeValue} to ${getValue()}\n`;
+        }
+        case 'unmodified': {
+          const path = `${accPath}${elem.name}.`;
+          return `${acc}${parse(elem.children, path)}`;
+        }
+        default:
+          return acc;
       }
-      if (elem.type === 'added') {
-        return `${acc}Property '${accPath + elem.name}' was added with value: ${value}\n`;
-      }
-      if (elem.type === 'modified') {
-        const beforeValue = typeof elem.oldValue === 'string' ? `'${elem.oldValue}'` : elem.oldValue;
-        return `${acc}Property '${accPath + elem.name}' was updated. From ${beforeValue} to ${value}\n`;
-      }
-      if (elem.type === 'unmodified' && elem.children.length > 0) {
-        const path = `${accPath}${elem.name}.`;
-        return `${acc}${parse(elem.children, path)}`;
-      }
-      return acc;
     }, '');
     return result;
   };

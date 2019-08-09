@@ -4,19 +4,14 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import generationStringData from './formatters';
 
-const buildObject = (dataFile) => {
-  const fileContent = dataFile.content;
-  const fileType = dataFile.type;
-  if (fileType === '.json') {
-    return JSON.parse(fileContent);
-  }
-  if (fileType === '.yml') {
-    return yaml.safeLoad(fileContent);
-  }
-  if (fileType === '.ini') {
-    return ini.decode(fileContent);
-  }
-  throw new Error('not the right format');
+const getParser = (extnameFile) => {
+  const extname = extnameFile.replace('.', '');
+  const mapping = {
+    json: JSON.parse,
+    yml: yaml.safeLoad,
+    ini: ini.decode,
+  };
+  return mapping[extname];
 };
 
 const runGenDiff = (firstPath, secondPath, format = 'tree') => {
@@ -26,17 +21,9 @@ const runGenDiff = (firstPath, secondPath, format = 'tree') => {
   const contentSecondFile = fs.readFileSync(afterPath, 'utf-8');
   const extnameFirstFile = path.extname(beforePath);
   const extnameSecondFile = path.extname(afterPath);
-  const dataFirstFile = {
-    content: contentFirstFile,
-    type: extnameFirstFile,
-  };
-  const dataSecondFile = {
-    content: contentSecondFile,
-    type: extnameSecondFile,
-  };
-  const beforeValue = buildObject(dataFirstFile);
-  const afterValue = buildObject(dataSecondFile);
-  console.log(generationStringData(beforeValue, afterValue, format));
+
+  const beforeValue = getParser(extnameFirstFile)(contentFirstFile);
+  const afterValue = getParser(extnameSecondFile)(contentSecondFile);
 
   return generationStringData(beforeValue, afterValue, format);
 };

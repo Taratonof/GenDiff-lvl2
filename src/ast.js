@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
 const getTreeDifference = (before, after) => {
-  const union = _.union(Object.keys(before), Object.keys(after));
-  const result = union.map((key) => {
+  const uniqKeys = _.union(Object.keys(before), Object.keys(after));
+  const result = uniqKeys.map((key) => {
     if (_.has(before, key) && _.has(after, key)) {
       if (_.isPlainObject(before[key]) && _.isPlainObject(after[key])) {
         return {
-          type: 'unmodified', name: key, value: 'no value', children: getTreeDifference(before[key], after[key]),
+          type: 'unmodified', name: key, children: getTreeDifference(before[key], after[key]),
         };
       }
       if (before[key] === after[key]) {
