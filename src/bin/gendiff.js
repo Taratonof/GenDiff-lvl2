@@ -10,7 +10,7 @@ program
   .arguments('<firstConfig> <secondConfig>')
   .option('-f, --format [type]', 'Output format: "plain" and "json"')
   .action((firstConfig, secondConfig, cmd) => {
-    runGenDiff(firstConfig, secondConfig, cmd.format);
+    console.log(runGenDiff(firstConfig, secondConfig, cmd.format));
   })
   .description('Compares two configuration files and shows a difference.');
 program.parse(process.argv);
