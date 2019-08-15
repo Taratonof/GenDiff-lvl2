@@ -6,7 +6,7 @@ const getTreeDifference = (before, after) => {
     if (_.has(before, key) && _.has(after, key)) {
       if (_.isPlainObject(before[key]) && _.isPlainObject(after[key])) {
         return {
-          type: 'unmodified', name: key, children: getTreeDifference(before[key], after[key]),
+          type: 'node', name: key, children: getTreeDifference(before[key], after[key]),
         };
       }
       if (before[key] === after[key]) {

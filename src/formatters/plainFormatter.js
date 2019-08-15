@@ -24,6 +24,10 @@ const getPlainFormat = (tree) => {
           const path = `${accPath}${elem.name}.`;
           return `${acc}${parse(elem.children, path)}`;
         }
+        case 'node': {
+          const path = `${accPath}${elem.name}.`;
+          return `${acc}${parse(elem.children, path)}`;
+        }
         default:
           return acc;
       }
