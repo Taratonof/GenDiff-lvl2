@@ -2,47 +2,43 @@ import _ from 'lodash';
 
 const tabs = num => ' '.repeat(num * 2);
 
-const parsePlainObject = (object, tabsLevel) => `{\n${Object.keys(object)
-  .map(key => `${tabs(tabsLevel + 2)}  ${key}: ${object[key]}`)
-  .join('\n')}\n${tabs(tabsLevel)}  }\n`;
+const parseValue = (value, tabsLevel) => {
+  if (_.isPlainObject(value)) {
+    return `{\n${Object.keys(value)
+      .map(key => `${tabs(tabsLevel + 2)}  ${key}: ${value[key]}`)
+      .join('\n')}\n${tabs(tabsLevel)}  }`;
+  }
+  return value;
+};
 
 const parseString = (tree) => {
   const parse = (elements, level) => {
     const result = elements.map((elem) => {
       switch (elem.type) {
         case 'deleted': {
-          if (_.isPlainObject(elem.value)) {
-            return `${tabs(level)}- ${elem.name}: ${parsePlainObject(elem.value, level)}`;
-          }
-          return `${tabs(level)}- ${elem.name}: ${elem.value}\n`;
+          return `${tabs(level)}- ${elem.name}: ${parseValue(elem.value, level)}`;
         }
         case 'added': {
-          if (_.isPlainObject(elem.value)) {
-            return `${tabs(level)}+ ${elem.name}: ${parsePlainObject(elem.value, level)}`;
-          }
-          return `${tabs(level)}+ ${elem.name}: ${elem.value}\n`;
+          return `${tabs(level)}+ ${elem.name}: ${parseValue(elem.value, level)}`;
         }
         case 'modified': {
-          const oldValue = (_.isPlainObject(elem.oldValue)) ? `${parsePlainObject(elem.oldValue, level)}${tabs(level)}` : `${elem.oldValue}\n${tabs(level)}`;
-          const value = (_.isPlainObject(elem.value)) ? parsePlainObject(elem.value, level) : `${elem.value}\n`;
-          return `${tabs(level)}- ${elem.name}: ${oldValue}+ ${elem.name}: ${value}`;
+          const oldValue = parseValue(elem.oldValue, level);
+          const value = parseValue(elem.value, level);
+          return `${tabs(level)}- ${elem.name}: ${oldValue}\n${tabs(level)}+ ${elem.name}: ${value}`;
         }
         case 'unmodified': {
-          if (_.isPlainObject(elem.value)) {
-            return `${tabs(level)}  ${elem.name}: ${parsePlainObject(elem.value, level)}`;
-          }
-          return `${tabs(level)}  ${elem.name}: ${elem.value}\n`;
+          return `${tabs(level)}  ${elem.name}: ${parseValue(elem.value, level)}`;
         }
         case 'node': {
-          return `${tabs(level)}  ${elem.name}: {\n${parse(elem.children, level + 2)}${tabs(level)}  }\n`;
+          return `${tabs(level)}  ${elem.name}: {\n${parse(elem.children, level + 2)}\n${tabs(level)}  }`;
         }
         default:
           throw new Error('No suitable type');
       }
     });
-    return result.join('');
+    return result.join('\n');
   };
-  return `{\n${parse(tree, 1)}}`;
+  return `{\n${parse(tree, 1)}\n}`;
 };
 
 export default parseString;

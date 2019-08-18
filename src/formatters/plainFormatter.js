@@ -1,38 +1,37 @@
+const getValue = (value) => {
+  if (typeof value === 'string') {
+    return `'${value}'`;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return value;
+  }
+  return '[complex value]';
+};
+
 const getPlainFormat = (tree) => {
   const parse = (elements, accPath) => {
-    const result = elements.reduce((acc, elem) => {
-      const getValue = () => {
-        if (typeof elem.value === 'string') {
-          return `'${elem.value}'`;
-        }
-        if (typeof elem.value === 'number' || typeof elem.value === 'boolean') {
-          return elem.value;
-        }
-        return '[complex value]';
-      };
-
+    const result = elements.map((elem) => {
       switch (elem.type) {
         case 'deleted':
-          return `${acc}Property '${accPath + elem.name}' was removed\n`;
+          return `Property '${accPath + elem.name}' was removed`;
         case 'added':
-          return `${acc}Property '${accPath + elem.name}' was added with value: ${getValue()}\n`;
+          return `Property '${accPath + elem.name}' was added with value: ${getValue(elem.value)}`;
         case 'modified': {
-          const beforeValue = typeof elem.oldValue === 'string' ? `'${elem.oldValue}'` : elem.oldValue;
-          return `${acc}Property '${accPath + elem.name}' was updated. From ${beforeValue} to ${getValue()}\n`;
+          return `Property '${accPath + elem.name}' was updated. From ${getValue(elem.oldValue)} to ${getValue(elem.value)}`;
         }
         case 'unmodified': {
           const path = `${accPath}${elem.name}.`;
-          return `${acc}${parse(elem.children, path)}`;
+          return `${parse(elem.children, path)}`.replace('\n', '');
         }
         case 'node': {
           const path = `${accPath}${elem.name}.`;
-          return `${acc}${parse(elem.children, path)}`;
+          return `${parse(elem.children, path)}`.replace('\n', '');
         }
         default:
-          return acc;
+          throw new Error('No suitable type');
       }
-    }, '');
-    return result;
+    });
+    return result.join('\n');
   };
   return parse(tree, '').trim();
 };
