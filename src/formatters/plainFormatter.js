@@ -17,11 +17,10 @@ const getPlainFormat = (tree) => {
         case 'added':
           return `Property '${accPath + elem.name}' was added with value: ${getValue(elem.value)}`;
         case 'modified': {
-          return `Property '${accPath + elem.name}' was updated. From ${getValue(elem.oldValue)} to ${getValue(elem.value)}`;
+          return `Property '${accPath + elem.name}' was updated. From ${getValue(elem.oldValue)} to ${getValue(elem.newValue)}`;
         }
         case 'unmodified': {
-          const path = `${accPath}${elem.name}.`;
-          return `${parse(elem.children, path)}`.replace('\n', '');
+          return '';
         }
         case 'node': {
           const path = `${accPath}${elem.name}.`;

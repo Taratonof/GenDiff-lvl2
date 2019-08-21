@@ -3,12 +3,12 @@ import _ from 'lodash';
 const tabs = num => ' '.repeat(num * 2);
 
 const parseValue = (value, tabsLevel) => {
-  if (_.isPlainObject(value)) {
-    return `{\n${Object.keys(value)
-      .map(key => `${tabs(tabsLevel + 2)}  ${key}: ${value[key]}`)
-      .join('\n')}\n${tabs(tabsLevel)}  }`;
+  if (!_.isPlainObject(value)) {
+    return value;
   }
-  return value;
+  return `{\n${Object.keys(value)
+    .map(key => `${tabs(tabsLevel + 2)}  ${key}: ${value[key]}`)
+    .join('\n')}\n${tabs(tabsLevel)}  }`;
 };
 
 const parseString = (tree) => {
@@ -23,8 +23,8 @@ const parseString = (tree) => {
         }
         case 'modified': {
           const oldValue = parseValue(elem.oldValue, level);
-          const value = parseValue(elem.value, level);
-          return `${tabs(level)}- ${elem.name}: ${oldValue}\n${tabs(level)}+ ${elem.name}: ${value}`;
+          const newValue = parseValue(elem.newValue, level);
+          return `${tabs(level)}- ${elem.name}: ${oldValue}\n${tabs(level)}+ ${elem.name}: ${newValue}`;
         }
         case 'unmodified': {
           return `${tabs(level)}  ${elem.name}: ${parseValue(elem.value, level)}`;
@@ -33,7 +33,7 @@ const parseString = (tree) => {
           return `${tabs(level)}  ${elem.name}: {\n${parse(elem.children, level + 2)}\n${tabs(level)}  }`;
         }
         default:
-          throw new Error('No suitable type');
+          throw new Error(`No suitable type: ${elem.type}`);
       }
     });
     return result.join('\n');

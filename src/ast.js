@@ -11,20 +11,20 @@ const getTreeDifference = (before, after) => {
       }
       if (before[key] === after[key]) {
         return {
-          type: 'unmodified', name: key, value: before[key], children: [],
+          type: 'unmodified', name: key, value: before[key],
         };
       }
       return {
-        type: 'modified', name: key, oldValue: before[key], value: after[key], children: [],
+        type: 'modified', name: key, oldValue: before[key], newValue: after[key],
       };
     }
     if (_.has(before, key) && !_.has(after, key)) {
       return {
-        type: 'deleted', name: key, value: before[key], children: [],
+        type: 'deleted', name: key, value: before[key],
       };
     }
     return {
-      type: 'added', name: key, value: after[key], children: [],
+      type: 'added', name: key, value: after[key],
     };
   });
   return result;
