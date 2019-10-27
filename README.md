@@ -8,11 +8,11 @@
 
 Работа с файлами(можно указывать, как абсолютный так и относительный путь) осуществляется командой: gendiff <путь до первого файла> <путь до второго файла>.
 
-Пример работы с форматом JSON и выводом различий ввиде дерева: https://asciinema.org/a/iLx8gNHkD9cNmnFqoPk7ePnZD.
+Пример работы с форматом JSON и выводом различий в виде дерева: https://asciinema.org/a/iLx8gNHkD9cNmnFqoPk7ePnZD.
 
-Пример работы с форматом INI и выводом различий ввиде дерева: https://asciinema.org/a/TVvDhJ4M0oefHupQwZ5A57JyY.
+Пример работы с форматом INI и выводом различий в виде дерева: https://asciinema.org/a/TVvDhJ4M0oefHupQwZ5A57JyY.
 
-Пример работы с форматом YML и выводом различий ввиде дерева: https://asciinema.org/a/K3IsHjhCBuIcXZJT854KvW9xv.
+Пример работы с форматом YML и выводом различий в виде дерева: https://asciinema.org/a/K3IsHjhCBuIcXZJT854KvW9xv.
 
 Кроме стандартного вывода ввиде дерева, возможен опциональный вывод в плоском("plain") либо JSON("json") форматах. Команда: gendiff --format [опция] <путь до первого файла> <путь до второго файла>.
 
